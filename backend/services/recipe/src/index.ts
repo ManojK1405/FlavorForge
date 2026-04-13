@@ -17,7 +17,7 @@ app.post('/generate', async (req, res) => {
   try {
     const { ingredients, mood, cuisine, foodDescription } = req.body;
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.5-flash",
+      model: "gemini-1.5-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
     
@@ -54,6 +54,10 @@ app.post('/generate', async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Failed to generate recipe", details: error.message });
   }
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: "Recipe Service Up" });
 });
 
 app.listen(port, () => {

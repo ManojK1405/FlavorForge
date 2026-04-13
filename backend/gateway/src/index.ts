@@ -25,6 +25,9 @@ app.use((req, res, next) => {
 const RECIPE_SERVICE_URL = process.env.RECIPE_SERVICE_URL || 'http://localhost:5001';
 const MOOD_SERVICE_URL = process.env.MOOD_SERVICE_URL || 'http://localhost:5002';
 
+console.log(`Configured Recipe Service: ${RECIPE_SERVICE_URL}`);
+console.log(`Configured Mood Service: ${MOOD_SERVICE_URL}`);
+
 app.post('/api/orchestrate', async (req, res) => {
   try {
     const { ingredients, mood, cuisine, foodDescription } = req.body;
@@ -32,12 +35,12 @@ app.post('/api/orchestrate', async (req, res) => {
     // 1. Get Recipe
     const recipeResponse = await axios.post(`${RECIPE_SERVICE_URL}/generate`, {
       ingredients, mood, cuisine, foodDescription
-    });
+    }, { timeout: 60000 });
     
     // 2. Get Mood Vibe (depends on recipe name)
     const vibeResponse = await axios.post(`${MOOD_SERVICE_URL}/mood-vibe`, {
       mood, cuisine, dishName: recipeResponse.data.dishName
-    });
+    }, { timeout: 60000 });
 
     res.json({
       recipe: recipeResponse.data,

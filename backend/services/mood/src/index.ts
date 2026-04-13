@@ -17,7 +17,7 @@ app.post('/mood-vibe', async (req, res) => {
   try {
     const { mood, cuisine, dishName } = req.body;
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.5-flash",
+      model: "gemini-1.5-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
     
@@ -57,6 +57,10 @@ app.post('/mood-vibe', async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Failed to generate mood vibe", details: error.message });
   }
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: "Mood Service Up" });
 });
 
 app.listen(port, () => {
