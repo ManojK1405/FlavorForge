@@ -17,7 +17,7 @@ app.post('/generate', async (req, res) => {
   try {
     const { ingredients, mood, cuisine, foodDescription } = req.body;
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
     
@@ -56,8 +56,14 @@ app.post('/generate', async (req, res) => {
   }
 });
 
-app.get('/health', (req, res) => {
-  res.json({ status: "Recipe Service Up" });
+app.get('/health', async (req, res) => {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    await model.generateContent("Say hello");
+    res.json({ status: "Recipe Service Up", ai: "connected" });
+  } catch (e: any) {
+    res.status(500).json({ status: "Recipe Service Up", ai: "disconnected", error: e.message });
+  }
 });
 
 app.listen(port, () => {
