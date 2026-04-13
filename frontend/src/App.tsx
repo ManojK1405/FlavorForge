@@ -71,7 +71,8 @@ function App() {
     setResult(null);
     setCurrentStep(0);
     try {
-      const response = await fetch('http://localhost:5005/api/orchestrate', {
+      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5005';
+      const response = await fetch(`${baseUrl}/api/orchestrate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ingredients, mood, cuisine, foodDescription: foodDescription.trim() || undefined }),
@@ -427,7 +428,7 @@ function App() {
       </main>
       
       <footer className="mt-20 text-white/30 text-xs tracking-widest uppercase pb-12">
-        Forged with ❤️ by Gemini AI ✨
+        Forged with ❤️ by Manoj K. ✨
       </footer>
     </div>
   );
