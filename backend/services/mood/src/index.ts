@@ -17,7 +17,7 @@ app.post('/mood-vibe', async (req, res) => {
   try {
     const { mood, cuisine, dishName } = req.body;
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       generationConfig: { responseMimeType: "application/json" }
     });
     
@@ -59,8 +59,14 @@ app.post('/mood-vibe', async (req, res) => {
   }
 });
 
-app.get('/health', (req, res) => {
-  res.json({ status: "Mood Service Up" });
+app.get('/health', async (req, res) => {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    await model.generateContent("Say hello");
+    res.json({ status: "Mood Service Up", ai: "connected" });
+  } catch (e: any) {
+    res.status(500).json({ status: "Mood Service Up", ai: "disconnected", error: e.message });
+  }
 });
 
 app.listen(port, () => {
